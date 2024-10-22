@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 enum fanSpeed_t {
   low = 40,
   medium = 60,

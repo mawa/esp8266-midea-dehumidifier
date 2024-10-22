@@ -1,21 +1,37 @@
 #include "types.h"
-#include "wifi.h"
+//#include "wifi.h"
 
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <ArduinoJson.h>
-#include <WiFiManager.h>
 #include <PubSubClient.h>
 //#include <SoftwareSerial.h>
 #include <ArduinoOTA.h>
 #include <FS.h>
+#include <WiFiManager.h>
+
+char mqtt_server[80] = "example.tld";
+
+char username[24] = "";
+char password[24] = "";
 
 dehumidifierState_t state;
 
 byte serialRxBuf[255];
 byte serialTxBuf[255];
 uint8_t mqttRetryCounter = 0;
+
+void mqttReconnect();
+void setupWifi();
+void handleUart();
+void getStatus();
+void handleStateUpdateRequest(String requestedState, String mode, String fanSpeed, byte humiditySetpoint);
+void loadConfig();
+void setupOTA();
+void publishAutoConfig();
+void saveConfig();
+void mqttCallback(char* topic, byte* payload, unsigned int length);
 
 
 WiFiManager wifiManager;
@@ -48,7 +64,9 @@ char MQTT_TOPIC_AUTOCONF_FAN[128];
 char MQTT_TOPIC_AUTOCONF_HUMIDIFIER[128];
 
 
-
+void updateAndSendNetworkStatus(boolean isConnected);
+void updateNetworkStatus(boolean isConnected);
+void sendSetStatus();
 
 bool shouldSaveConfig = false;
 

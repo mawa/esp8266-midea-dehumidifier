@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 static const byte crc_table[] = {  
     0x00,0x5e,0xbc,0xE2,0x61,0x3F,0xDD,0x83,
     0xC2,0x9C,0x7E,0x20,0xA3,0xFD,0x1F,0x41,
@@ -43,7 +45,7 @@ byte crc8(byte *addr, byte len){
 
 byte checksum(byte *addr, byte len) {
   byte sum = 0;
-  *addr++;
+  addr++;
 
   while(len--) {
     sum = sum + *addr++;

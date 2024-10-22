@@ -1,3 +1,10 @@
+#include <Arduino.h>
+#include <ArduinoJson.h>
+#include "wifi.h"
+#include <memory>
+#include "FS.h"
+#include "spiffs_api.h"
+
 void saveConfig() {
   DynamicJsonDocument json(512);
   json["mqtt_server"] = mqtt_server;

@@ -1,3 +1,21 @@
+#include "types.h"
+
+byte checksum(byte *addr, byte len);
+
+extern dehumidifierState_t state;
+
+void sendMessage(byte msgType, byte agreementVersion, byte payloadLength, byte *payload);
+void clearRxBuf();
+void clearTxBuf();
+void publishState();
+void resetWifiSettingsAndReboot();
+boolean isMqttConnected();
+byte crc8(byte *addr, byte len);
+void updateAndSendNetworkStatus(boolean isConnected);
+void updateSetStatus(boolean powerOn, dehumMode_t dehumMode, fanSpeed_t fanSpeed, byte humiditySetpoint);
+void updateNetworkStatus(boolean isConnected);
+void sendSetStatus();
+
 byte networkStatus[20];
 byte currentHeader[10];
 byte getStatusCommand[21] = {
@@ -7,9 +25,11 @@ byte getStatusCommand[21] = {
   0x00, 0x00, 0x03
 };
 byte setStatusCommand[25];
+extern byte serialRxBuf[255];
+extern byte serialTxBuf[255];
 
 void parseState() {
-  state.powerOn = serialRxBuf[11] & 0x01 > 0;
+  state.powerOn = serialRxBuf[11] & 0x01;
   state.mode = (dehumMode_t)(serialRxBuf[12] & 0x0f);
   state.fanSpeed = (fanSpeed_t)(serialRxBuf[13] & 0x7f);
 
