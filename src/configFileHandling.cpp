@@ -6,7 +6,7 @@
 #include "spiffs_api.h"
 
 void saveConfig() {
-  DynamicJsonDocument json(512);
+  JsonDocument json;
   json["mqtt_server"] = mqtt_server;
   json["username"] = username;
   json["password"] = password;
@@ -31,7 +31,7 @@ void loadConfig() {
         std::unique_ptr<char[]> buf(new char[size]);
 
         configFile.readBytes(buf.get(), size);
-        DynamicJsonDocument json(512);
+        JsonDocument json;
 
         if (DeserializationError::Ok == deserializeJson(json, buf.get())) {
           strcpy(mqtt_server, json["mqtt_server"]);

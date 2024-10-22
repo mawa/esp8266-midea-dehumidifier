@@ -217,8 +217,8 @@ boolean isMqttConnected() {
 }
 
 void publishState() {
-  DynamicJsonDocument wifiJson(192);
-  DynamicJsonDocument stateJson(604);
+  JsonDocument wifiJson;
+  JsonDocument stateJson;
   char payload[256];
 
   wifiJson["ssid"] = WiFi.SSID();
@@ -265,7 +265,7 @@ void publishState() {
 
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, MQTT_TOPIC_COMMAND) == 0) {
-    DynamicJsonDocument commandJson(256);
+    JsonDocument commandJson;
     char payloadText[length + 1];
 
     snprintf(payloadText, length + 1, "%s", payload);
@@ -287,9 +287,9 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
 void publishAutoConfig() {
   char mqttPayload[2048];
-  DynamicJsonDocument device(256);
-  DynamicJsonDocument autoconfPayload(1024);
-  StaticJsonDocument<64> identifiersDoc;
+  JsonDocument device;
+  JsonDocument autoconfPayload;
+  JsonDocument identifiersDoc;
   JsonArray identifiers = identifiersDoc.to<JsonArray>();
 
   identifiers.add(identifier);
@@ -333,7 +333,7 @@ void publishAutoConfig() {
   autoconfPayload.clear();
 
 
-  StaticJsonDocument<64> optionsDoc;
+  JsonDocument optionsDoc;
   JsonArray speedOptions = optionsDoc.to<JsonArray>();
 
   speedOptions.add("low");
@@ -379,7 +379,7 @@ void publishAutoConfig() {
   autoconfPayload["payload_on"] = "{\"state\": \"on\"}";
   autoconfPayload["payload_off"] = "{\"state\": \"off\"}";
 
-  StaticJsonDocument<64> modesDoc;
+  JsonDocument modesDoc;
   JsonArray modes = modesDoc.to<JsonArray>();
 
   autoconfPayload["target_humidity_state_topic"] = MQTT_TOPIC_STATE;
